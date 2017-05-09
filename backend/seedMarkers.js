@@ -12,13 +12,15 @@ var seedMarkers = [
     lat: 30.2672,
     lng: -97.7431,
     smalltext: 'map marker 1 small text',
-    bigtext: 'MAP MARKER 1 BIG TEXT'
+    bigtext: 'MAP MARKER 1 BIG TEXT',
+    clicked: false
   },
   {
     lat: 30.3,
     lng: -99,
     smalltext: 'map marker 2 small text',
-    bigtext: 'MAP MARKER 2 BIG TEXT'
+    bigtext: 'MAP MARKER 2 BIG TEXT',
+    clicked: false
   }
 ];
 

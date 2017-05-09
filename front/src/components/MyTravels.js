@@ -18,31 +18,9 @@ class MyTravels extends Component {
     this.state = {
       currentlocationid: null,
       locations: [],
-      locaitonsloaded: false
-      // locations: [{    lat: 30.2672,
-      //                  lng: -97.7431,
-      //                  smalltext: 'map marker 1 small text',
-      //                  bigtext: 'MAP MARKER 1 BIG TEXT'},
-      //             {    lat: 30.2672,
-      //                  lng: -97.7431,
-      //                  smalltext: 'map marker 1 small text',
-      //                  bigtext: 'MAP MARKER 1 BIG TEXT'}]
+      locationsloaded: false
     }
   }
-
-
-  // handlegrabLocation(locationid){
-  //
-  // }
-  //
-  //
-  // handlegrabLocation(locationid){
-  //
-  // }
-  // handleLocation={this.handleLocation.bind(this)}
-  // handlegrabLocation ={this.handlegrabLocation.bind(this)}
-  //
-  //
 
   componentWillMount(){
     var self = this;
@@ -91,9 +69,7 @@ class MyTravels extends Component {
     const XMapOverlayx =  ()=> {
       return(
         <div>
-          <MapOverlay
-
-          />
+          <MapOverlay/>
         </div>
       )
     }

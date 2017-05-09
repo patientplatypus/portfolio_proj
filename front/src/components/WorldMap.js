@@ -19,37 +19,76 @@ class WorldMap extends Component {
           response: '',
           zoom: 0,
           center:{lat: 30.2672, lng: -97.7431},
-          clicked: [false,false]
+          locations: null
         };
   }
 
 
+    componentWillMount(){
+      this.setState({
+        locations: this.props.locations
+      })
+    }
+
+
 render() {
 
-  const _onClick =  (x,y, id) => {
-           console.log(x,y,id,this.state.clicked[id]);
-           if(this.state.clicked[id]===true){
-             var newclicked = this.state.clicked;
-             newclicked[id] = false;
+  const _onClick =  (x,y, id, keyitem) => {
+
+          var varkeyitem = keyitem;
+          console.log('this.state.locations.data[varkeyitem].clicked INONCLICK', this.state.locations.data[varkeyitem].clicked);
+          console.log('value of varykeyitem in onclick ', varkeyitem);
+          debugger;
+
+           if(this.state.locations.data[varkeyitem].clicked===true){
+
+             var newlocations=this.state.locations.data
+             newlocations[varkeyitem].clicked = false;
+
+             console.log('newlocations testing true', newlocations);
+             debugger;
+
              this.setState({
-               clicked: newclicked
+               locations: newlocations
              });
-           }else if(this.state.clicked[id]===false){
-             var newclicked = this.state.clicked;
-             newclicked[id] = true;
+
+           }else if(this.state.locations.data[varkeyitem].clicked===false){
+
+             var newlocations=this.state.locations.data
+             newlocations[varkeyitem].clicked = true;
+
+             console.log('newlocations testing false', newlocations);
+             debugger;
+
              this.setState({
-               clicked: newclicked
+               locations: newlocations
              });
+             console.log('locations after setstate', this.state.locations);
+             debugger;
+
            }
-           console.log(x,y,id,this.state.clicked[id]);
   }
 
-  const MapMarkerComponent = ({smalltext, bigtext, lat, lng, id}) =>{
-          if (this.state.clicked[id]===true){
-            return(<div className="showbig"  onClick={() => _onClick(lat, lng, id)}><p>{bigtext}</p></div>)
-          }else if(this.state.clicked[id]===false){
-            return(<div className="showsmall"  onClick={() => _onClick(lat, lng, id)}><p>{smalltext}</p></div>)
-          }
+  const MapMarkerComponent = ({smalltext, bigtext, lat, lng, id, keyitem}) =>{
+
+    var varkeyitem = keyitem
+    console.log('this.state.locations.data[varkeyitem].clicked', this.state.locations.data[varkeyitem].clicked);
+
+    if (this.state.locations.data[varkeyitem].clicked){
+       return(<div className="showbig"  onClick={() => _onClick(lat, lng, id, keyitem)}><p>{bigtext}</p></div>)
+    }else{
+      //  const locations=this.state.locations.data;
+      //  locations[varkeyitem].clicked=true;
+      //  //setTimeout(()=>{
+      //    this.setState({
+      //      locations:locations
+      //    })
+      //  //}, 500);
+
+       return(<div className="showsmall"  onClick={() => _onClick(lat, lng, id, keyitem)}><p>{smalltext}</p></div>)
+    }
+
+
   }
 
 
@@ -58,9 +97,10 @@ render() {
     scrollwheel: false,
   }
 
-  const mapmarkers = this.props.locations.data.map(location=>{
+  const mapmarkers = this.state.locations.data.map((location, index)=>{
     console.log("location ", location);
-    return(<MapMarkerComponent key={location._id} {...location} />)
+    console.log("index i ", index);
+    return(<MapMarkerComponent key={index} keyitem={index} {...location} />)
   });
 
 
@@ -90,6 +130,43 @@ export default WorldMap;
 
 
 
+    // handleChange(e) {
+    //     const items = this.state.items;
+    //     items[1].role = e.target.value;
+    //
+    //     // update state
+    //     this.setState({
+    //         items,
+    //     });
+    // }
+
+    // console.log("this.state.locations ", this.state.locations);
+    // console.log("this.state.locations filtering ", this.state.locations.data.filter((location)=>{location.clicked===false}))
+    //
+
+
+    // const raw = this.state.locations.data
+    //
+    // const allowed = [{id}];
+    //
+    // const filtered = Object.keys(raw)
+    //   .filter(key => allowed.includes(key))
+    //   .reduce((obj, key) => {
+    //     obj[key] = raw[key];
+    //     return obj;
+    //   }, {});
+    //
+    // console.log(filtered);
+    //
+    // return(<div></div>);
+
+    //var thislocation = this.state.locations.data.filter((location)=>{location._id===id});
+    //console.log('thislocation ', thislocation);
+          // if (this.state.locations[id]===true){
+          //   return(<div className="showbig"  onClick={() => _onClick(lat, lng, id)}><p>{bigtext}</p></div>)
+          // }else if(this.state.clicked[id]===false){
+          //   return(<div className="showsmall"  onClick={() => _onClick(lat, lng, id)}><p>{smalltext}</p></div>)
+          // }
 
 
 
