@@ -8,13 +8,51 @@ import {
 import axios from 'axios';
 import "./Component.css";
 import WorldMap from './WorldMap';
+import MapOverlay from './MapOverlay';
 import { Parallax, Background } from 'react-parallax';
 
 
 class MyTravels extends Component {
   constructor(props){
     super(props);
-    this.state = {}
+    this.state = {
+      currentlocationid: null,
+      locations: [],
+      locaitonsloaded: false
+      // locations: [{    lat: 30.2672,
+      //                  lng: -97.7431,
+      //                  smalltext: 'map marker 1 small text',
+      //                  bigtext: 'MAP MARKER 1 BIG TEXT'},
+      //             {    lat: 30.2672,
+      //                  lng: -97.7431,
+      //                  smalltext: 'map marker 1 small text',
+      //                  bigtext: 'MAP MARKER 1 BIG TEXT'}]
+    }
+  }
+
+
+  // handlegrabLocation(locationid){
+  //
+  // }
+  //
+  //
+  // handlegrabLocation(locationid){
+  //
+  // }
+  // handleLocation={this.handleLocation.bind(this)}
+  // handlegrabLocation ={this.handlegrabLocation.bind(this)}
+  //
+  //
+
+  componentWillMount(){
+    var self = this;
+    axios.get('http://localhost:5000/locations')
+    .then((response)=>{
+      self.setState({
+        locations: response,
+        locationsloaded: true
+      })
+    })
   }
 
   render() {
@@ -50,6 +88,30 @@ class MyTravels extends Component {
       }
     });
 
+    const XMapOverlayx =  ()=> {
+      return(
+        <div>
+          <MapOverlay
+
+          />
+        </div>
+      )
+    }
+
+    const XWorldMap =  ()=> {
+      if(this.state.locationsloaded===true){
+        return(
+          <div>
+            <WorldMap
+                locations={this.state.locations}
+            />
+          </div>
+        )
+      }else{
+        return(<div></div>)
+      }
+
+    }
 
 
 
@@ -61,8 +123,11 @@ class MyTravels extends Component {
 
         <TheContainer/>
 
+        <div className = "mapcontainer">
+          <XMapOverlayx/>
+          <XWorldMap/>
+        </div>
 
-        <WorldMap/>
       </div>
     );
   }

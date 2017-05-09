@@ -8,3 +8,17 @@
   font-size:12em;*/
   padding-top:50px;
 }
+
+.overlaycomponent{
+  position: absolute;
+  left: 25px;
+  top: 25px;
+  height: 450px;
+  width: 450px;
+  background-color: black;
+  z-index: 10;
+}
+
+.mapcontainer{
+  position: relative;
+}

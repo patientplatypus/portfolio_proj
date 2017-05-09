@@ -1,7 +1,7 @@
 
 
 
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component, PureComponent } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
@@ -10,89 +10,78 @@ import "./WorldMap.css";
 
 class WorldMap extends Component {
 
-constructor(props){
-  super(props);
-  this.state = {
-    ipaddress: '',
-    lat: '',
-    lon: '',
-    response: '',
-    zoom: 3,
-    //defaultcenter:{lat: 59.95, lng: 30.33},
-    center:{lat: 30.2672, lng: -97.7431},
-    clicked: [false,false]
-  };
-}
+  constructor(props){
+        super(props);
+        this.state = {
+          ipaddress: '',
+          lat: '',
+          lon: '',
+          response: '',
+          zoom: 0,
+          center:{lat: 30.2672, lng: -97.7431},
+          clicked: [false,false]
+        };
+  }
 
 
 render() {
 
   const _onClick =  (x,y, id) => {
-
-     console.log(x,y,id,this.state.clicked[id]);
-
-     if(this.state.clicked[id]===true){
-       var newclicked = this.state.clicked;
-       newclicked[id] = false;
-       this.setState({
-         clicked: newclicked
-       });
-     }else if(this.state.clicked[id]===false){
-       var newclicked = this.state.clicked;
-       newclicked[id] = true;
-       this.setState({
-         clicked: newclicked
-       });
-     }
-
-     console.log(x,y,id,this.state.clicked[id]);
-
-    }
-
-  const MapMarkerComponent = ({text, biggertext, lat, lng, id}) =>{
-    if (this.state.clicked[id]===true){
-      return(<div className="showbig"  onClick={() => _onClick(lat, lng, id)}><p>{biggertext}</p></div>)
-
-    }else if(this.state.clicked[id]===false){
-      return(<div className="showsmall"  onClick={() => _onClick(lat, lng, id)}><p>{text}</p></div>)
-    }
+           console.log(x,y,id,this.state.clicked[id]);
+           if(this.state.clicked[id]===true){
+             var newclicked = this.state.clicked;
+             newclicked[id] = false;
+             this.setState({
+               clicked: newclicked
+             });
+           }else if(this.state.clicked[id]===false){
+             var newclicked = this.state.clicked;
+             newclicked[id] = true;
+             this.setState({
+               clicked: newclicked
+             });
+           }
+           console.log(x,y,id,this.state.clicked[id]);
   }
-  // {
-  //   let boundClick = this._onClick.bind(this, {text,lat,lng});
-  //   return(
-  //     <div className="componentbox" onClick={boundClick}><p>{text} {lat} {lng}</p></div>;
-  //   )
-  // }
-  //
 
+  const MapMarkerComponent = ({smalltext, bigtext, lat, lng, id}) =>{
+          if (this.state.clicked[id]===true){
+            return(<div className="showbig"  onClick={() => _onClick(lat, lng, id)}><p>{bigtext}</p></div>)
+          }else if(this.state.clicked[id]===false){
+            return(<div className="showsmall"  onClick={() => _onClick(lat, lng, id)}><p>{smalltext}</p></div>)
+          }
+  }
+
+
+
+  const MAP_OPTIONS = {
+    scrollwheel: false,
+  }
+
+  const mapmarkers = this.props.locations.data.map(location=>{
+    console.log("location ", location);
+    return(<MapMarkerComponent key={location._id} {...location} />)
+  });
 
 
     return (
-      <div className='googleMap' style={{width: "500px", height: "500px", margin: "0 auto"}}>
-      <GoogleMapReact
-        bootstrapURLKeys={{
-          key: 'AIzaSyBKSMaMwm7UTigL5sZGHS2VA0JUfghcSI4'
-        }}
-        center={this.state.center}
-        defaultZoom={this.state.zoom}
-        >
+          <div className='googleMap' style={{width: "100%", height: "500px", margin: "0 auto"}}>
 
-        <MapMarkerComponent lat= {30.2672}
-                            lng= {-97.7431}
-                            text= "Uno"
-                            biggertext = {"UNOUNO"}
-                            id= {0}
-                            />
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: 'AIzaSyBKSMaMwm7UTigL5sZGHS2VA0JUfghcSI4'
+                }}
+                center={this.state.center}
+                defaultZoom={this.state.zoom}
+                options={MAP_OPTIONS}
+                >
 
-        <MapMarkerComponent lat= {30.20}
-                            lng= {-95}
-                            text= "Dos"
-                            biggertext = {"DOS DOS asd asdf asdf asdf /n a sdff asdf fasd ff asdff asd as d asdf ads a sdff asdf"}
-                            id= {1}
-                            />
+                      {mapmarkers}
 
-        </GoogleMapReact   >
-      </div>
+
+                </GoogleMapReact>
+
+          </div>
     );
   }
 }
@@ -105,6 +94,76 @@ export default WorldMap;
 
 
 
+  // console.log("after if in worldmap mapmarker and this.props.location is ", this.props.locations);
+  // const Mapmarker = ()=>{
+  //
+  //   // console.log('the value of this.props is ', this.props);
+  //   // console.log('the value of this.props.locations.data.length is ', this.props.locations.data.length);
+  //   //
+  //   // if(this.props.locations===null){
+  //   //   console.log("we have null");
+  //   // }
+  //   //
+  //   // if(this.props.locations===undefined){
+  //   //   console.log("we have undefined");
+  //   // }
+  //
+  //     if(this.props.locations.data.length>0){
+  //         //  return(
+  //                   this.props.locations.data.map(location => {
+  //                         console.log("this is the location object ", location);
+  //                         console.log('location._id ', location._id);
+  //                         console.log('location.lat ', location.lat);
+  //                         console.log('location.lng ', location.lng);
+  //                         console.log('location.smalltext ', location.smalltext);
+  //                         console.log('location.bigtext ', location.bigtext);
+  //                             return (
+  //                               <MapMarkerComponent key={location._id}
+  //                                                   lat={location.lat}
+  //                                                   lng={location.lng}
+  //                                                   smalltext={location.smalltext}
+  //                                                   bigtext={location.bigtext} />
+  //                             )
+  //                   })
+  //       //    )
+  //       }
+  //   }
+   //
+  //  <MapMarkerComponent lat= {30.2672}
+  //                      lng= {-97.7431}
+  //                      text= "Uno"
+  //                      biggertext = {"UNOUNO"}
+  //                      id= {0}
+  //                      />
+   //
+  //  <MapMarkerComponent lat= {30.20}
+  //                      lng= {-95}
+  //                      text= "Dos"
+  //                      biggertext = {"DOS DOS asd asdf asdf asdf /n a sdff asdf fasd ff asdff asd as d asdf ads a sdff asdf"}
+  //                      id= {1}
+  //                      />
+   //
+   //
+   //
+   //
+
+//
+//    class GrowlList extends Component {
+//   render(){
+//
+//     const growls = this.props.growls.map(growl => {
+//       return(
+//         <Growl key={growl.id} {...growl} />
+//       )
+//     });
+//
+//     return(
+//       <ul className="class-growls">
+//         { growls }
+//       </ul>
+//     )
+//   }
+// }
 
 
 
