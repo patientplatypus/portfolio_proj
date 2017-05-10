@@ -18,7 +18,8 @@ class MyTravels extends Component {
     this.state = {
       currentlocationid: null,
       locations: [],
-      locationsloaded: false
+      locationsloaded: false,
+      locationclicked: null
     }
   }
 
@@ -32,6 +33,15 @@ class MyTravels extends Component {
       })
     })
   }
+
+  handleLocClick(clickedloc){
+    console.log('inside handleLocClick and the clickedloc is ', clickedloc);
+    this.setState({
+      locationclicked: clickedloc
+    })
+  }
+
+
 
   render() {
 
@@ -69,7 +79,8 @@ class MyTravels extends Component {
     const XMapOverlayx =  ()=> {
       return(
         <div>
-          <MapOverlay/>
+          <MapOverlay
+               locationclicked={this.state.locationclicked}/>
         </div>
       )
     }
@@ -80,6 +91,7 @@ class MyTravels extends Component {
           <div>
             <WorldMap
                 locations={this.state.locations}
+                handleLocClick={this.handleLocClick.bind(this)}
             />
           </div>
         )

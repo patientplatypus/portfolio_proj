@@ -19,7 +19,8 @@ class WorldMap extends Component {
           response: '',
           zoom: 0,
           center:{lat: 30.2672, lng: -97.7431},
-          locations: null
+          locations: null,
+          clickedkey:null
         };
   }
 
@@ -31,43 +32,62 @@ class WorldMap extends Component {
     }
 
 
+
+
+
+
+    _onClick(event,lat,lng, id, keyitem){
+        event.preventDefault();
+            var varkeyitem = keyitem;
+            console.log('this.state.locations.data[varkeyitem].clicked INONCLICK', this.state.locations.data[varkeyitem].clicked);
+            console.log('value of varykeyitem in onclick ', varkeyitem);
+            // debugger;
+
+             if(this.state.locations.data[varkeyitem].clicked===true){
+
+               var newlocations=this.state.locations
+               newlocations.data[varkeyitem].clicked = false;
+
+               console.log('newlocations testing true', newlocations);
+              //  debugger;
+
+               this.setState({
+                 locations: newlocations
+               });
+
+             }else if(this.state.locations.data[varkeyitem].clicked===false){
+
+               console.log(varkeyitem);
+              //  debugger;
+
+               var newlocations=this.state.locations
+               newlocations.data.forEach(function(loc){
+                 loc.clicked=false;
+               })
+               newlocations.data[varkeyitem].clicked=true;
+
+               console.log('newlocations testing false', newlocations);
+              //  debugger;
+
+               this.setState({
+                 locations: newlocations
+               });
+               console.log('locations after setstate', this.state.locations);
+              //  debugger;
+
+              this.props.handleLocClick(this.state.locations.data[varkeyitem]);
+
+
+             }
+    }
+
+
+
+
 render() {
 
-  const _onClick =  (x,y, id, keyitem) => {
 
-          var varkeyitem = keyitem;
-          console.log('this.state.locations.data[varkeyitem].clicked INONCLICK', this.state.locations.data[varkeyitem].clicked);
-          console.log('value of varykeyitem in onclick ', varkeyitem);
-          debugger;
 
-           if(this.state.locations.data[varkeyitem].clicked===true){
-
-             var newlocations=this.state.locations.data
-             newlocations[varkeyitem].clicked = false;
-
-             console.log('newlocations testing true', newlocations);
-             debugger;
-
-             this.setState({
-               locations: newlocations
-             });
-
-           }else if(this.state.locations.data[varkeyitem].clicked===false){
-
-             var newlocations=this.state.locations.data
-             newlocations[varkeyitem].clicked = true;
-
-             console.log('newlocations testing false', newlocations);
-             debugger;
-
-             this.setState({
-               locations: newlocations
-             });
-             console.log('locations after setstate', this.state.locations);
-             debugger;
-
-           }
-  }
 
   const MapMarkerComponent = ({smalltext, bigtext, lat, lng, id, keyitem}) =>{
 
@@ -75,7 +95,7 @@ render() {
     console.log('this.state.locations.data[varkeyitem].clicked', this.state.locations.data[varkeyitem].clicked);
 
     if (this.state.locations.data[varkeyitem].clicked){
-       return(<div className="showbig"  onClick={() => _onClick(lat, lng, id, keyitem)}><p>{bigtext}</p></div>)
+       return(<div className="showbig"  onClick={(event) => this._onClick(event, lat, lng, id, keyitem)}><p>{bigtext}</p></div>)
     }else{
       //  const locations=this.state.locations.data;
       //  locations[varkeyitem].clicked=true;
@@ -85,7 +105,7 @@ render() {
       //    })
       //  //}, 500);
 
-       return(<div className="showsmall"  onClick={() => _onClick(lat, lng, id, keyitem)}><p>{smalltext}</p></div>)
+       return(<div className="showsmall"  onClick={(event) => this._onClick(event, lat, lng, id, keyitem)}><p>{smalltext}</p></div>)
     }
 
 
@@ -100,6 +120,7 @@ render() {
   const mapmarkers = this.state.locations.data.map((location, index)=>{
     console.log("location ", location);
     console.log("index i ", index);
+    // debugger;
     return(<MapMarkerComponent key={index} keyitem={index} {...location} />)
   });
 
